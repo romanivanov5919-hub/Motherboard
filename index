@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datei-Portal & Reklamations-Nachweise | Roman Ivanov</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        accent: {
+                            rose: '#f43f5e',
+                            amber: '#f59e0b',
+                            emerald: '#10b981',
+                            indigo: '#6366f1'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .dark .glass {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-200 flex flex-col">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-30 glass border-b border-gray-200 dark:border-gray-800 transition-colors">
+        <div class="max-w-7xl mx-mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl border border-red-200 dark:border-red-900/50">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight flex items-center gap-2">
+                        Reklamation & Beweismittel
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 border border-red-300 dark:border-red-800">Falschlieferung</span>
+                    </h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Bestellung AU202259 • Rechnungs-Nr. RE2566977</p>
+                </div>
+            </div>
+
+            <!-- Top Actions -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button id="themeToggle" class="p-2.5 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all border border-transparent hover:border-gray-200 dark:hover:border-gray-700" title="Design wechseln">
+                    <svg id="sunIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg id="moonIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+
+                <button id="downloadAllBtn" class="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm px-4 py-2.5 rounded-xl transition-all shadow-md hover:shadow-brand-500/20 active:scale-[0.98]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    <span class="hidden sm:inline">Alle 3 Dateien laden</span>
+                    <span class="sm:hidden">Alle Download</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Case Information Card -->
+        <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 sm:p-6 shadow-sm relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-bl-full pointer-events-none"></div>
+            
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div class="space-y-2 max-w-3xl">
+                    <div class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                        <span>Händler: Junck Technologies GmbH</span>
+                        <span>•</span>
+                        <span>Plattform: MediaMarktSaturn Marketplace</span>
+                        <span>•</span>
+                        <span>Datum: 14.09.2026</span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                        Sammel-Dokumentation: Abweichung Gelieferter Artikel
+                    </h2>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Es wurde das Mainboard <strong class="text-brand-600 dark:text-brand-400">MSI MAG B850 TOMAHAWK MAX WIFI</strong> (210,99 €) bestellt und abgerechnet. Geliefert wurde stattdessen das abweichende Modell <strong class="text-red-600 dark:text-red-400">MSI MAG B850 GAMING PLUS MAX WIFI</strong>. Die folgenden drei Nachweis-Dateien stehen zur Ansicht und zum Download bereit.
+                    </p>
+                </div>
+
+                <!-- Highlight Box -->
+                <div class="bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/60 rounded-xl p-4 flex flex-col gap-2 min-w-[260px]">
+                    <div class="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+                        <span>Kunde:</span>
+                        <span class="font-medium text-gray-800 dark:text-gray-200">Roman Ivanov</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+                        <span>Lieferschein-Nr.:</span>
+                        <span class="font-mono text-gray-800 dark:text-gray-200">3496341</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+                        <span>Rechnungs-Betrag:</span>
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400">210,99 €</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200 dark:border-gray-700">
+                        <span>Dateien Gesamt:</span>
+                        <span class="font-medium text-gray-900 dark:text-gray-100">3 Dateien (Video, JPG, PDF)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls Bar (Filter & Search) -->
+        <section class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+            <!-- Filter Pills -->
+            <div class="flex items-center gap-1.5 bg-gray-200/70 dark:bg-gray-800/70 p-1 rounded-xl w-fit">
+                <button data-filter="all" class="filter-btn active-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all">
+                    Alle (3)
+                </button>
+                <button data-filter="video" class="filter-btn text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all">
+                    Videos (1)
+                </button>
+                <button data-filter="image" class="filter-btn text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all">
+                    Bilder (1)
+                </button>
+                <button data-filter="pdf" class="filter-btn text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all">
+                    PDFs (1)
+                </button>
+            </div>
+
+            <!-- Search Input -->
+            <div class="relative flex-1 sm:max-w-xs">
+                <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Dateien durchsuchen..." class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl pl-10 pr-4 py-2 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all">
+            </div>
+        </section>
+
+        <!-- Files Grid -->
+        <section id="filesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Card 1: Unboxing Video -->
+            <div class="file-card group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-brand-500/50 hover:shadow-xl hover:shadow-brand-500/5 transition-all flex flex-col" data-type="video" data-name="unboxing_video.mp4">
+                <!-- Thumbnail / Media Header -->
+                <div class="relative h-48 bg-gray-950 flex items-center justify-center overflow-hidden cursor-pointer" onclick="openPreview('video')">
+                    <!-- Background Video Preview Pattern -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10"></div>
+                    <div class="absolute inset-0 opacity-40 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                    
+                    <!-- Simulated Video Frame / Icon -->
+                    <div class="relative z-20 flex flex-col items-center gap-2 group-hover:scale-105 transition-transform duration-300">
+                        <div class="w-14 h-14 rounded-full bg-indigo-600/90 hover:bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-600/40 ring-4 ring-white/10">
+                            <svg class="w-7 h-7 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-semibold text-white/90 bg-black/60 px-2.5 py-1 rounded-full backdrop-blur-md border border-white/10">
+                            Vorschau abspielen
+                        </span>
+                    </div>
+
+                    <!-- Top Badge -->
+                    <div class="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-indigo-500/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        VIDEO (MP4)
+                    </div>
+
+                    <!-- Bottom Tag -->
+                    <div class="absolute bottom-3 right-3 z-20 text-[11px] font-mono font-medium text-white/80 bg-black/60 px-2 py-0.5 rounded">
+                        01:25 • MP4
+                    </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-start justify-between gap-2">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-base group-hover:text-brand-500 transition-colors line-clamp-1" title="Unboxing_Video.mp4">
+                                Unboxing_Video.mp4
+                            </h3>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                                Unboxing-Beweis
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 leading-relaxed">
+                            Aufnahme des unbeschädigten Pakets, Aufschneiden des Klebebands & Entnahme der falsch gelieferten B850 Gaming Plus Max WIFI Verpackung.
+                        </p>
+                    </div>
+
+                    <div class="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-500">
+                        <span>Größe: ~24.8 MB</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openPreview('video')" class="p-2 text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all" title="Vorschau öffen">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+                            <button onclick="downloadFile('Unboxing_Video.mp4')" class="flex items-center gap-1.5 bg-gray-100 hover:bg-brand-600 hover:text-white dark:bg-gray-800 dark:hover:bg-brand-600 text-gray-700 dark:text-gray-200 font-medium px-3 py-1.5 rounded-lg transition-all">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Falscher Motherboard Foto -->
+            <div class="file-card group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-brand-500/50 hover:shadow-xl hover:shadow-brand-500/5 transition-all flex flex-col" data-type="image" data-name="falscher motherboard.jpg">
+                <!-- Thumbnail / Media Header -->
+                <div class="relative h-48 bg-gray-900 flex items-center justify-center overflow-hidden cursor-pointer" onclick="openPreview('image')">
+                    <!-- SVG Image Mock representation -->
+                    <div class="absolute inset-0 flex items-center justify-center bg-gray-900 group-hover:scale-105 transition-transform duration-300">
+                        <svg class="w-full h-full text-gray-800" viewBox="0 0 400 220" fill="none">
+                            <rect width="400" height="220" fill="#18181b"/>
+                            <!-- Board Box Simulation -->
+                            <rect x="130" y="30" width="240" height="160" rx="6" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+                            <text x="145" y="60" fill="#ef4444" font-size="14" font-weight="bold">MAG B850</text>
+                            <text x="145" y="80" fill="#f43f5e" font-size="12" font-weight="bold">GAMING PLUS MAX WIFI</text>
+                            <text x="145" y="110" fill="#a1a1aa" font-size="9">FALSCHLIEFERUNG (Erhalten)</text>
+                            <rect x="145" y="130" width="80" height="20" rx="3" fill="#3f3f46"/>
+                            <text x="155" y="144" fill="#ffffff" font-size="9">Ready for AI PC</text>
+                            <!-- Invoice Paper -->
+                            <rect x="30" y="40" width="90" height="130" rx="4" fill="#f4f4f5" stroke="#e4e4e7"/>
+                            <text x="38" y="58" fill="#18181b" font-size="8" font-weight="bold">Lieferschein</text>
+                            <text x="38" y="68" fill="#52525b" font-size="7">3496341</text>
+                            <line x1="38" y1="78" x2="110" y2="78" stroke="#d4d4d8" stroke-width="1"/>
+                            <line x1="38" y1="88" x2="95" y2="88" stroke="#d4d4d8" stroke-width="1"/>
+                        </svg>
+                    </div>
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent z-10"></div>
+
+                    <!-- Overlay Icon -->
+                    <div class="relative z-20 flex flex-col items-center gap-1.5 opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all">
+                        <div class="w-12 h-12 rounded-full bg-amber-500/90 text-white flex items-center justify-center shadow-lg shadow-amber-500/30 backdrop-blur-md">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <span class="text-xs font-semibold text-white bg-black/60 px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/10">
+                            Bild groß anzeigen
+                        </span>
+                    </div>
+
+                    <!-- Top Badge -->
+                    <div class="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-amber-500/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        FOTO (JPG)
+                    </div>
+
+                    <!-- Size Badge -->
+                    <div class="absolute bottom-3 right-3 z-20 text-[11px] font-mono font-medium text-white/80 bg-black/60 px-2 py-0.5 rounded">
+                        4032 × 3024
+                    </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-start justify-between gap-2">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-base group-hover:text-brand-500 transition-colors line-clamp-1" title="Falscher Motherboard.jpg">
+                                Falscher Motherboard.jpg
+                            </h3>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300">
+                                Falschartikel
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 leading-relaxed">
+                            Detailfoto des gelieferten MSI MAG B850 Gaming Plus Max WiFi Kartons neben dem Lieferschein 3496341.
+                        </p>
+                    </div>
+
+                    <div class="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-500">
+                        <span>Größe: 3.4 MB</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openPreview('image')" class="p-2 text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all" title="Vorschau öffen">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+                            <button onclick="downloadFile('Falscher Motherboard.jpg')" class="flex items-center gap-1.5 bg-gray-100 hover:bg-brand-600 hover:text-white dark:bg-gray-800 dark:hover:bg-brand-600 text-gray-700 dark:text-gray-200 font-medium px-3 py-1.5 rounded-lg transition-all">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Kundenrechnung PDF -->
+            <div class="file-card group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-brand-500/50 hover:shadow-xl hover:shadow-brand-500/5 transition-all flex flex-col" data-type="pdf" data-name="kundenrechnung_01125_328117144-a (1).pdf">
+                <!-- Thumbnail / Media Header -->
+                <div class="relative h-48 bg-rose-950/20 dark:bg-rose-950/40 flex items-center justify-center overflow-hidden cursor-pointer" onclick="openPreview('pdf')">
+                    <!-- PDF Page Simulation Preview -->
+                    <div class="w-32 h-40 bg-white dark:bg-gray-100 rounded shadow-md border border-gray-200 transform group-hover:scale-105 transition-transform duration-300 p-2.5 flex flex-col justify-between text-[6px] text-gray-700 pointer-events-none">
+                        <div>
+                            <div class="flex justify-between items-center border-b border-gray-200 pb-1 mb-1">
+                                <span class="font-bold text-rose-700">Junck Technologies</span>
+                                <span>RE2566977</span>
+                            </div>
+                            <div class="font-semibold text-gray-900 mb-1">RECHNUNG</div>
+                            <div class="bg-gray-100 p-1 rounded mb-1">
+                                <div class="font-bold text-gray-800">MAG B850 TOMAHAWK MAX WIFI</div>
+                                <div class="text-gray-500">Menge: 1 • 177,30 €</div>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-200 pt-1 flex justify-between font-bold text-gray-900">
+                            <span>Gesamt (inkl. MwSt):</span>
+                            <span class="text-emerald-700">210,99 €</span>
+                        </div>
+                    </div>
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+
+                    <!-- Top Badge -->
+                    <div class="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-rose-600/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        PDF RECHNUNG
+                    </div>
+
+                    <!-- Overlay Label -->
+                    <div class="absolute bottom-3 right-3 z-20 text-[11px] font-mono font-medium text-white/90 bg-black/60 px-2 py-0.5 rounded">
+                        1 Seite • PDF
+                    </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-start justify-between gap-2">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-base group-hover:text-brand-500 transition-colors line-clamp-1" title="Kundenrechnung_01125_328117144-A (1).pdf">
+                                Kundenrechnung_01125...pdf
+                            </h3>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">
+                                Kaufbeleg
+                            </span>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 leading-relaxed">
+                            Originalrechnung der Junck Technologies GmbH über B850 Tomahawk Max WiFi (210,99 €) vom 14.09.2026.
+                        </p>
+                    </div>
+
+                    <div class="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-500">
+                        <span>Größe: 142 KB</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openPreview('pdf')" class="p-2 text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all" title="Vorschau öffen">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+                            <button onclick="downloadFile('Kundenrechnung_01125_328117144-A (1).pdf')" class="flex items-center gap-1.5 bg-gray-100 hover:bg-brand-600 hover:text-white dark:bg-gray-800 dark:hover:bg-brand-600 text-gray-700 dark:text-gray-200 font-medium px-3 py-1.5 rounded-lg transition-all">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Details & Timeline Section -->
+        <section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm space-y-4">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Fall-Chronologie & Reklamations-Details
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div class="p-4 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-200/80 dark:border-gray-700/50 space-y-1">
+                    <div class="text-xs font-semibold text-brand-600 dark:text-brand-400">1. Bestellung (12.09.2026)</div>
+                    <div class="text-sm font-bold text-gray-800 dark:text-gray-200">MSI MAG B850 TOMAHAWK</div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Gekauft über MediaMarktSaturn Marketplace für 210,99 € inkl. MwSt. & Versand.</p>
+                </div>
+                
+                <div class="p-4 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-200/80 dark:border-gray-700/50 space-y-1">
+                    <div class="text-xs font-semibold text-amber-600 dark:text-amber-400">2. Lieferung & Unboxing (14.09.2026)</div>
+                    <div class="text-sm font-bold text-gray-800 dark:text-gray-200">Paketöffnung per Video dokumentiert</div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Beim Öffnen des Pakets mit Lieferschein 3496341 wurde das Gaming Plus Max vorgefunden.</p>
+                </div>
+
+                <div class="p-4 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-200/80 dark:border-gray-700/50 space-y-1">
+                    <div class="text-xs font-semibold text-rose-600 dark:text-rose-400">3. Reklamations-Status</div>
+                    <div class="text-sm font-bold text-gray-800 dark:text-gray-200">Nachweis-Bereitstellung</div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Sämtliche Belege und Unboxing-Videos auf diesem Server gebündelt hinterlegt.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-500 dark:text-gray-400">
+        <p>Sicheres Datei-Portal • Erstellt für Roman Ivanov (Simeonstr. 28, 32423 Minden)</p>
+    </footer>
+
+    <!-- PREVIEW MODAL (Universal Lightbox) -->
+    <div id="previewModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 transition-all duration-300">
+        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl w-full max-w-5xl max-h-[92vh] flex flex-col overflow-hidden shadow-2xl relative">
+            
+            <!-- Modal Header -->
+            <div class="p-4 px-6 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-900">
+                <div class="flex items-center gap-3">
+                    <div id="modalIconContainer" class="p-2 rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
+                        <!-- Icon injected by JS -->
+                    </div>
+                    <div>
+                        <h3 id="modalTitle" class="font-bold text-gray-900 dark:text-white text-base sm:text-lg">Dateivorschau</h3>
+                        <p id="modalSubtext" class="text-xs text-gray-500 dark:text-gray-400">Metadaten werden geladen...</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button id="modalDownloadBtn" class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3.5 py-2 rounded-xl transition-all shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span class="hidden sm:inline">Herunterladen</span>
+                    </button>
+                    <button onclick="closePreview()" class="p-2 text-gray-500 hover:text-gray-800 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800 rounded-xl transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body (Dynamic Media Content) -->
+            <div id="modalBody" class="flex-1 overflow-auto bg-gray-950 flex items-center justify-center min-h-[350px] p-2 sm:p-4 custom-scrollbar">
+                <!-- Content injected dynamically (Video Player / Canvas Photo / PDF Viewer) -->
+            </div>
+
+            <!-- Modal Footer Controls -->
+            <div id="modalFooter" class="p-3 px-6 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-xs text-gray-500 dark:text-gray-400 flex items-center justify-between">
+                <span id="modalFooterInfo">Datei 1 von 3</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="navigatePreview(-1)" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-lg transition-all" title="Vorherige Datei">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button onclick="navigatePreview(1)" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-lg transition-all" title="Nächste Datei">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gray-900 text-white dark:bg-white dark:text-gray-900 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-gray-700 dark:border-gray-200">
+        <svg class="w-5 h-5 text-emerald-400 dark:text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        <span id="toastMessage" class="text-sm font-medium">Aktion erfolgreich.</span>
+    </div>
+
+    <script>
+        // File Registry & Data
+        const filesData = {
+            video: {
+                id: 'video',
+                name: 'Unboxing_Video.mp4',
+                type: 'MP4 Video (1080p)',
+                size: '24.8 MB',
+                tag: 'Unboxing-Beweis',
+                description: 'Videoaufzeichnung des Auspackens. Zeigt die ungeöffnete Box, das Öffnen des Versandkartons und die Freilegung des falschen Mainboard-Modells MSI MAG B850 GAMING PLUS MAX WIFI.'
+            },
+            image: {
+                id: 'image',
+                name: 'Falscher Motherboard.jpg',
+                type: 'Foto (JPG)',
+                size: '3.4 MB',
+                tag: 'Falschartikel',
+                description: 'Hochauflösendes Foto der gelieferten Mainboard-Verpackung (MSI MAG B850 GAMING PLUS MAX WIFI) direkt neben dem Originallieferschein 3496341.'
+            },
+            pdf: {
+                id: 'pdf',
+                name: 'Kundenrechnung_01125_328117144-A (1).pdf',
+                type: 'PDF Dokument',
+                size: '142 KB',
+                tag: 'Kaufbeleg',
+                description: 'Offizielle Rechnung RE2566977 der Junck Technologies GmbH über 210,99 € für das bestellte Modell MSI MAG B850 TOMAHAWK MAX WIFI.'
+            }
+        };
+
+        const fileKeys = ['video', 'image', 'pdf'];
+        let currentPreviewKey = 'video';
+
+        // Dark/Light Theme Switcher Logic
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+
+        function initTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        });
+        initTheme();
+
+        // Toast Notification Function
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Simulated File Download Handlers
+        function downloadFile(filename) {
+            showToast(`Download gestartet: ${filename}`);
+            
+            // Generate synthetic Blob content depending on file type for real downloading
+            let content = "";
+            let mimeType = "text/plain";
+
+            if (filename.endsWith('.mp4')) {
+                content = "SIMULATED_MP4_VIDEO_STREAM_DATA_REKLAMATION_UNBOXING";
+                mimeType = "video/mp4";
+            } else if (filename.endsWith('.jpg')) {
+                content = "SIMULATED_JPG_IMAGE_DATA_FALSCHER_MOTHERBOARD";
+                mimeType = "image/jpeg";
+            } else if (filename.endsWith('.pdf')) {
+                content = "%PDF-1.4\n1 0 obj\n<< /Title (Kundenrechnung RE2566977) /Author (Junck Technologies GmbH) >>\nendobj\n";
+                mimeType = "application/pdf";
+            }
+
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        document.getElementById('downloadAllBtn').addEventListener('click', () => {
+            showToast('Sammel-Download wird vorbereitet...');
+            setTimeout(() => downloadFile('Unboxing_Video.mp4'), 300);
+            setTimeout(() => downloadFile('Falscher Motherboard.jpg'), 800);
+            setTimeout(() => downloadFile('Kundenrechnung_01125_328117144-A (1).pdf'), 1300);
+        });
+
+        // Universal Lightbox Modal Logic
+        function openPreview(key) {
+            currentPreviewKey = key;
+            const data = filesData[key];
+            const modal = document.getElementById('previewModal');
+            const title = document.getElementById('modalTitle');
+            const subtext = document.getElementById('modalSubtext');
+            const body = document.getElementById('modalBody');
+            const iconContainer = document.getElementById('modalIconContainer');
+            const downloadBtn = document.getElementById('modalDownloadBtn');
+            const footerInfo = document.getElementById('modalFooterInfo');
+
+            title.textContent = data.name;
+            subtext.textContent = `${data.type} • ${data.size} • ${data.tag}`;
+            footerInfo.textContent = `Datei ${fileKeys.indexOf(key) + 1} von ${fileKeys.length}`;
+
+            downloadBtn.onclick = () => downloadFile(data.name);
+
+            // Render Preview Body Content
+            if (key === 'video') {
+                iconContainer.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>`;
+                body.innerHTML = `
+                    <div class="w-full flex flex-col items-center justify-center p-4">
+                        <div class="relative w-full max-w-3xl aspect-video bg-black rounded-xl overflow-hidden shadow-2xl flex flex-col items-center justify-center border border-gray-800">
+                            <!-- Simulated Animated Video Canvas/Player -->
+                            <div class="absolute inset-0 bg-gradient-to-tr from-indigo-950/80 via-gray-900 to-black flex flex-col items-center justify-center p-6 text-center">
+                                <div class="w-20 h-20 rounded-full bg-indigo-600/30 border border-indigo-400/40 flex items-center justify-center mb-4 animate-pulse">
+                                    <svg class="w-10 h-10 text-indigo-400 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                                <h4 class="text-white font-bold text-lg mb-1">Unboxing Video Abspielbereit</h4>
+                                <p class="text-xs text-gray-400 max-w-md">Video zeigt Öffnung des Pakets (Lieferschein 3496341) und Bestätigung des falschen Mainboards (MSI MAG B850 GAMING PLUS MAX WIFI).</p>
+                                <div class="mt-4 flex gap-3">
+                                    <button onclick="showToast('Video wird abgespielt...')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all">
+                                        Wiedergabe starten
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-3 text-center">${data.description}</p>
+                    </div>
+                `;
+            } else if (key === 'image') {
+                iconContainer.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`;
+                body.innerHTML = `
+                    <div class="w-full flex flex-col items-center justify-center p-2 sm:p-4">
+                        <div class="relative max-w-4xl w-full bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-2xl p-4 flex flex-col items-center">
+                            <!-- Visual Render of Motherboard Box and Lieferschein -->
+                            <div class="w-full bg-zinc-900 rounded-lg p-6 border border-zinc-700 flex flex-col md:flex-row items-center justify-center gap-6">
+                                <!-- Lieferschein Paper -->
+                                <div class="bg-white text-black p-4 rounded shadow-md w-full md:w-1/3 text-[10px] space-y-2 font-mono">
+                                    <div class="border-b pb-1 font-bold text-xs text-gray-800">LIEFERSCHEIN 3496341</div>
+                                    <div><strong>Absender:</strong> FIT Distribution / Junck Tech</div>
+                                    <div><strong>Empfänger:</strong> Roman Ivanov</div>
+                                    <div>Simeonstr. 28, 32423 Minden</div>
+                                    <div class="bg-gray-100 p-1 rounded border">
+                                        <div><strong>Pos 1:</strong> MSI MAG B850 GAMING PLUS MAX WIFI</div>
+                                        <div>Menge: 1 STÜCK</div>
+                                    </div>
+                                    <div class="text-[8px] text-gray-500">Datum: 14.09.2026</div>
+                                </div>
+                                
+                                <!-- Product Box Graphic -->
+                                <div class="bg-gradient-to-br from-zinc-800 to-zinc-950 text-white p-6 rounded-lg border-2 border-red-600/80 shadow-2xl w-full md:w-2/3 space-y-3">
+                                    <div class="flex justify-between items-start">
+                                        <span class="text-xs font-bold tracking-widest text-red-500">MSI ARSENAL GAMING</span>
+                                        <span class="text-[10px] bg-red-600/30 text-red-400 px-2 py-0.5 rounded border border-red-500/40">GELIEFERT</span>
+                                    </div>
+                                    <h3 class="text-xl font-black tracking-tight text-white">MAG B850 GAMING PLUS MAX WIFI</h3>
+                                    <div class="flex gap-2 text-[10px]">
+                                        <span class="bg-zinc-700 px-2 py-1 rounded text-zinc-200">SOCKET AM5</span>
+                                        <span class="bg-zinc-700 px-2 py-1 rounded text-zinc-200">RYZEN 9000 READY</span>
+                                        <span class="bg-cyan-900/60 text-cyan-300 px-2 py-1 rounded">READY FOR AI PC</span>
+                                    </div>
+                                    <div class="text-xs text-red-400 pt-2 border-t border-zinc-700/80 font-medium">
+                                        ⚠️ Abweichung: Bestellt war B850 TOMAHAWK MAX WIFI
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-4 text-center">${data.description}</p>
+                        </div>
+                    </div>
+                `;
+            } else if (key === 'pdf') {
+                iconContainer.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`;
+                body.innerHTML = `
+                    <div class="w-full flex flex-col items-center justify-center p-2 sm:p-4">
+                        <!-- Rendered Invoice Document View -->
+                        <div class="w-full max-w-2xl bg-white text-gray-900 rounded-lg p-6 sm:p-8 shadow-2xl font-sans text-xs space-y-6 border border-gray-300">
+                            <!-- Header -->
+                            <div class="flex justify-between items-start border-b border-gray-200 pb-4">
+                                <div>
+                                    <h2 class="text-lg font-bold text-blue-900">Junck Technologies GmbH</h2>
+                                    <p class="text-gray-500 text-[10px]">Rodheimer Str. 88, 35452 Heuchelheim</p>
+                                    <p class="text-gray-500 text-[10px]">E-Mail: service@technik-guenstiger.de</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-base font-bold text-gray-800">RECHNUNG</span>
+                                    <p class="text-gray-600 font-mono text-[11px]">Nr. RE2566977</p>
+                                    <p class="text-gray-500 text-[10px]">Datum: 14.09.2026</p>
+                                </div>
+                            </div>
+
+                            <!-- Customer Info & Details -->
+                            <div class="grid grid-cols-2 gap-4 bg-gray-50 p-3 rounded border border-gray-100">
+                                <div>
+                                    <span class="text-[10px] font-semibold text-gray-400 uppercase">Empfänger</span>
+                                    <p class="font-bold text-gray-800">Roman Ivanov</p>
+                                    <p class="text-gray-600">Simeonstr. 28</p>
+                                    <p class="text-gray-600">32423 Minden, Deutschland</p>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] font-semibold text-gray-400 uppercase">Auftragsdaten</span>
+                                    <p>Auftragsnr.: <span class="font-mono">AU202259</span></p>
+                                    <p>Kundennr.: <span class="font-mono">KU277390</span></p>
+                                    <p>Zahlung: MediaMarktSaturn (12.09.2026)</p>
+                                </div>
+                            </div>
+
+                            <!-- Table -->
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-gray-300 text-gray-600 font-semibold bg-gray-100">
+                                        <th class="py-1.5 px-2">Pos</th>
+                                        <th class="py-1.5 px-2">ArtNr</th>
+                                        <th class="py-1.5 px-2">Bezeichnung</th>
+                                        <th class="py-1.5 px-2 text-right">Menge</th>
+                                        <th class="py-1.5 px-2 text-right">E-Preis</th>
+                                        <th class="py-1.5 px-2 text-right">G-Preis</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-200">
+                                        <td class="py-2 px-2">1</td>
+                                        <td class="py-2 px-2 font-mono text-[10px]">ITJ2218695900</td>
+                                        <td class="py-2 px-2 font-bold text-blue-900">MAG B850 TOMAHAWK MAX WIFI</td>
+                                        <td class="py-2 px-2 text-right">1</td>
+                                        <td class="py-2 px-2 text-right">177,30 €</td>
+                                        <td class="py-2 px-2 text-right font-medium">177,30 €</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 text-gray-500">
+                                        <td class="py-2 px-2">2</td>
+                                        <td class="py-2 px-2 font-mono text-[10px]">-</td>
+                                        <td class="py-2 px-2">DHL Versandkosten</td>
+                                        <td class="py-2 px-2 text-right">1</td>
+                                        <td class="py-2 px-2 text-right">0,00 €</td>
+                                        <td class="py-2 px-2 text-right">0,00 €</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Summary Totals -->
+                            <div class="flex justify-end">
+                                <div class="w-1/2 space-y-1 text-right pt-2 border-t border-gray-200">
+                                    <div class="flex justify-between text-gray-600">
+                                        <span>Gesamt Netto:</span>
+                                        <span>177,30 €</span>
+                                    </div>
+                                    <div class="flex justify-between text-gray-600">
+                                        <span>zzgl. 19% MwSt.:</span>
+                                        <span>33,69 €</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm font-bold text-emerald-700 pt-1 border-t border-gray-300">
+                                        <span>Gesamtbetrag:</span>
+                                        <span>210,99 €</span>
+                                    </div>
+                                    <div class="text-[10px] text-emerald-600">Geleistet am 12.09.2026 • Offener Betrag: 0,00 €</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function navigatePreview(direction) {
+            const currentIndex = fileKeys.indexOf(currentPreviewKey);
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0) newIndex = fileKeys.length - 1;
+            if (newIndex >= fileKeys.length) newIndex = 0;
+            openPreview(fileKeys[newIndex]);
+        }
+
+        // Close modal on escape key press
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closePreview();
+        });
+
+        // Filter Buttons Functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const fileCards = document.querySelectorAll('.file-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-900', 'dark:text-white', 'shadow-sm', 'font-semibold');
+                    b.classList.add('text-gray-600', 'dark:text-gray-400');
+                });
+                btn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-900', 'dark:text-white', 'shadow-sm', 'font-semibold');
+                btn.classList.remove('text-gray-600', 'dark:text-gray-400');
+
+                const filter = btn.getAttribute('data-filter');
+                fileCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-type') === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Search Input Filter
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            fileCards.forEach(card => {
+                const name = card.getAttribute('data-name').toLowerCase();
+                if (name.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Initialize default active filter pill styles
+        document.querySelector('.filter-btn[data-filter="all"]').classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-900', 'dark:text-white', 'shadow-sm', 'font-semibold');
+    </script>
+</body>
+</html>
